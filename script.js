@@ -4,30 +4,18 @@ let arrayOfCarsTableRows
 let arrayOfCarsMakeAndModels = []
 
 const fetch = require('node-fetch')
+
 async function getFetch() {
     const resp = await fetch('http://kodeturbo.com/index.php?do=turbo&oem=767378-0013')
     const respTpText = await resp.text()
     const funcToFindAllOptions = await findOptions(respTpText)
-     arrayOfAllMake = await funcToFindAllOptions
+    arrayOfAllMake = await funcToFindAllOptions
     arrayOfAllLinksToCarMake = await linksOfAllMake(arrayOfAllMake)
     const makeDataFromArrayOfLunksToCarMake = await dataFromArrayOfAllLinksToCarMake(arrayOfAllLinksToCarMake)
     return console.log(makeDataFromArrayOfLunksToCarMake)
 }
 
 getFetch()
-
-//
-// const fetch = require('node-fetch')
-// fetch('http://kodeturbo.com/index.php?do=turbo&oem=767378-0013')
-// .then(resp => resp.text())
-//         .then(resp => {
-//             arrayOfAllMake = (findOptions(resp))
-//         })
-//         .then(() => arrayOfAllLinksToCarMake= (linksOfAllMake(arrayOfAllMake)))
-//         .then(() => (dataFromArrayOfAllLinksToCarMake(arrayOfAllLinksToCarMake)))
-//
-
-
 
 const findOptions = (dateFromFirstStepFetch) => {
     const arrayOfData = [dateFromFirstStepFetch]
@@ -46,7 +34,7 @@ const findOptions = (dateFromFirstStepFetch) => {
     return arrayOfAllMake = arrayOfMake
 }
 
-const linksOfAllMake = (arrayOfAllMake) =>{
+const linksOfAllMake = (arrayOfAllMake) => {
     const links = arrayOfAllMake.map(stringToLink => `http://kodeturbo.com/index.php?marka=${stringToLink}&do=cars`)
     return arrayOfAllLinksToCarMake = links
 }
@@ -94,11 +82,11 @@ const makeArrayOfCarAttributes = (trFormWebPage) => {
     }
     let carssMake = carsMake()
     console.log('carssMake', carssMake)
-    let arrayOfFullCarNames = trFormWebPage.map((singleTrFormWebPage, i)=> {
+    let arrayOfFullCarNames = trFormWebPage.map((singleTrFormWebPage, i) => {
         let firstEndOfTd = singleTrFormWebPage.indexOf("</td>", endOfCarsName)
-            let beginning = singleTrFormWebPage.indexOf("<td>", beginningOfCarsName)
-            let end = singleTrFormWebPage.indexOf("</td>", firstEndOfTd+1)
-            return singleTrFormWebPage.slice(beginning+4, end)
-        })
+        let beginning = singleTrFormWebPage.indexOf("<td>", beginningOfCarsName)
+        let end = singleTrFormWebPage.indexOf("</td>", firstEndOfTd + 1)
+        return singleTrFormWebPage.slice(beginning + 4, end)
+    })
     return arrayOfCarsMakeAndModels[carssMake] = arrayOfFullCarNames
 }
