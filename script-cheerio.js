@@ -22,33 +22,37 @@ async function getProducers() {
 }
 
 async function getModelsLinks() {
-var total = [];
-    mainProducers.map(async (producer, i) => {
-        // const allModels = await fetch(`${url[0]}${url[2]}${producer}${url[3]}`)
-        const allModels = await fetch(`http://kodeturbo.com/index.php?marka=BMW&do=cars`)
-        const resp = await allModels.text()
-        const $ = cheerio.load(resp)
-        const bleh = await ($('tr').map(async function (i, el) {
-            let spr = []
-            const linkString = await $(el).attr('onclick')
-            if (linkString !== undefined) {
-                let slicedLinkString = linkString.slice(15, linkString.length - 1)
-                let carLinkReadyToPush = slicedLinkString.replace(/ /g, "%");
-                spr.push(carLinkReadyToPush)
-            }
-            return total.push(spr)
-            // console.log(total)
+    const zmienna = await Promise.all(mainProducers.map(async (producer, i) => {
+            try {
+                const allModels = await fetch(`${url[0]}${url[2]}${producer}${url[3]}`)
+                // const allModels = await fetch(`http://kodeturbo.com/index.php?marka=BMW&do=cars`)
+                const resp = await allModels.text()
+                const $ = cheerio.load(resp)
+                const bleh = await Promise.all($('tr').map(async function (i, el) {
+                    let spr = []
+                    const linkString = await $(el).attr('onclick')
+                    if (linkString !== undefined) {
+                        let slicedLinkString = linkString.slice(15, linkString.length - 1)
+                        let carLinkReadyToPush = slicedLinkString.replace(/ /g, "%");
+                        spr.push(carLinkReadyToPush)
+                    }
+                    return spr
+                }).get())
 
-        }).get())
-        return console.log(total)
-    })
- // console.log(total)
+                return bleh
+            }
+            catch {
+                console.log('nie działa getModelsLinks()')
+            }
+        }
+    ))
+    return linkToCars.push(zmienna)
 }
 
 
 async function getAllModelsNames() {
     linkToCars.map(async (alink, i) => {
-        // console.log(linkToCars)
+        console.log(linkToCars[0])
         // const allModels = await fetch(`${url[0]}${alink}`)
         // const resp = await allModels.text()
         //
