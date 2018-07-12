@@ -5,7 +5,7 @@ const cheerio = require('cheerio')
 const url = [`http://kodeturbo.com/index.php`, `?marka=`, `?do=cars2&marka=`, `&do=cars`, `&model=`, `?do=turbo&oem=`]
 let mainObject = []
 let mainProducers = []
-var linkToCars = []
+let linkToCars = []
 
 async function getProducers() {
 
@@ -22,27 +22,33 @@ async function getProducers() {
 }
 
 async function getModelsLinks() {
-    const listOfLinksToEdit = await mainProducers.map(async (producer, i) => {
+var total = [];
+    mainProducers.map(async (producer, i) => {
         // const allModels = await fetch(`${url[0]}${url[2]}${producer}${url[3]}`)
         const allModels = await fetch(`http://kodeturbo.com/index.php?marka=BMW&do=cars`)
-        const resp = await  allModels.text()
-        const $ = await cheerio.load(resp)
-        const editedList = await ($('tr').each(async () => {
-            const linkString = await ($(this).attr('onclick'))
+        const resp = await allModels.text()
+        const $ = cheerio.load(resp)
+        const bleh = await ($('tr').map(async function (i, el) {
+            let spr = []
+            const linkString = await $(el).attr('onclick')
             if (linkString !== undefined) {
-                let slicedLinkString = await linkString.slice(15, linkString.length - 1)
-                let carLinkReadyToPush = await slicedLinkString.replace(/ /g, "%");
-                 return linkToCars.push(carLinkReadyToPush)
+                let slicedLinkString = linkString.slice(15, linkString.length - 1)
+                let carLinkReadyToPush = slicedLinkString.replace(/ /g, "%");
+                spr.push(carLinkReadyToPush)
             }
-        }))
-        return linkToCars.push(editedList)
+            return total.push(spr)
+            // console.log(total)
+
+        }).get())
+        return console.log(total)
     })
+ // console.log(total)
 }
 
 
 async function getAllModelsNames() {
     linkToCars.map(async (alink, i) => {
-        console.log(linkToCars)
+        // console.log(linkToCars)
         // const allModels = await fetch(`${url[0]}${alink}`)
         // const resp = await allModels.text()
         //
