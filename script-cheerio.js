@@ -3,8 +3,8 @@ const cheerio = require('cheerio')
 
 
 const url = [`http://kodeturbo.com/index.php`, `?marka=`, `?do=cars2&marka=`, `&do=cars`, `&model=`, `?do=turbo&oem=`]
-// let mainProducers = []
-let mainProducers = [`Ford`, `Alfa-Romeo`]
+// let mainProducers = []//odkomentować żeby ściagać wszystko
+let mainProducers = [`Ford`, `Alfa-Romeo`] //zakomentować gdy ściągane jest wszystko
 let linkToCars = []
 let arrayXYZ = []
 
@@ -19,7 +19,7 @@ let arrayXYZ = []
 //         const $mark = $(mark)
 //         mainProducers.push($mark.text())
 //     })
-// }
+// }//odkomentować żeby ściagać wszystko
 
 async function getModelsLinks() {
     const mapProducersToTr = await Promise.all(mainProducers.map(async (producer, i) => {
@@ -120,7 +120,7 @@ async function getAllTurboNo() {
 }
 
 async function callFunctions() {
-    // await getProducers()
+    // await getProducers() //odkomentować żeby ściagać wszystko
     await getModelsLinks()
     await getAllModelsNames()
     await getAllTurboNo()
