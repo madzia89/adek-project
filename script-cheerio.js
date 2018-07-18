@@ -3,8 +3,8 @@ const cheerio = require('cheerio')
 
 
 const url = [`http://kodeturbo.com/index.php`, `?marka=`, `?do=cars2&marka=`, `&do=cars`, `&model=`, `?do=turbo&oem=`]
-// let mainProducers = []
-let mainProducers = ['KIA']
+let mainProducers = []
+// let mainProducers = ['BMW']
 let linkToCars = []
 let arrayofCars = []
 let mainArrayOfTurbines = []
@@ -44,7 +44,6 @@ async function getModelsLinks() {
 async function getAllModelsNames() {
     let arrayForPushingModels = []
     await Promise.all(linkToCars.map(async (alink, i) => {
-
             let mapToSaveInAboveArray = await Promise.all(alink.map(async function (singleLinkToModel) {
                 try {
                     const allModels = await fetch(`${url[0]}${singleLinkToModel}`)
@@ -89,6 +88,7 @@ async function getAllTurboNo() {
                 for (let j = 0; j < arrayOfSliceIndexes.length; j++) {
                     let turbineNumber = variableForSixthIndexOfElement.slice(arrayOfSliceIndexes[j], arrayOfSliceIndexes[j + 1])
                     turbinesArray.push(turbineNumber)
+
                 }
                 await Promise.all(turbinesArray.map(async singleTurbine => {
                     let removeWhiteSpaces = await singleTurbine.trim()
@@ -147,7 +147,7 @@ async function getTurboData() {
 }
 
 async function callFunctions() {
-    // await getProducers() //odkomentować żeby ściagać wszystko
+    await getProducers() //odkomentować żeby ściagać wszystko
     await getModelsLinks()
     await getAllModelsNames()
     await getAllTurboNo()
